@@ -1,0 +1,30 @@
+version: '2'
+services:
+  nginx:
+    build: ./docker/nginx_for_php_fpm
+    image: er1cst/nginx:latest
+    volumes:
+      - "./docker/nginx_for_php_fpm/etc/nginx/sites-enabled:/etc/nginx/sites-enabled"
+      - "./src:/var/www/html"
+    ports:
+      - "localhost:1001:80"
+      - "localhost:1002:443"
+  php-fpm:
+    build: ./docker/php_fpm_with_extensions
+    image: er1cst/php7.0.10-fpm
+    volumes:
+      - "./src:/var/www/html"
+    environment:
+      ISCUECER_MYSQL_USER: "bitworkshop"
+      ISCUECER_MYSQL_PASSWORD: "3CKtZ6nVasC3sQQb"
+      ISCUECER_MYSQL_DATABASE: "bitworkshop"
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - "./docker/db_store:/var/lib/mysql"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "hsjKHLhVJn8HMZMC"
+      MYSQL_DATABASE: "bitworkshop"
+      MYSQL_USER: "bitworkshop"
+      MYSQL_PASSWORD: "3CKtZ6nVasC3sQQb"
